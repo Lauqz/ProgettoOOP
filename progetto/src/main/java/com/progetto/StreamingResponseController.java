@@ -1,9 +1,9 @@
 package com.progetto;
 
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URI;
@@ -11,27 +11,29 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Scanner;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
-import org.json.simple.parser.ParseException;
 
 @RestController  // It is also possible to @Controller.
 public class StreamingResponseController {
-    @RequestMapping(value = "downloadTestFile", method = RequestMethod.GET)
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     public void getSteamingFile(HttpServletResponse response) throws Exception {
-    Boolean culo=true;
-	if(culo){
-		response.setContentType("text/csv");
+//    File f = new File("C:\\Users\\guido\\Download\\t1.csv");
+      boolean b = true;
+      if(b/*f.exists() && !f.isDirectory()*/){
+		response.setContentType("application/excel");
 		response.setHeader("Content-Disposition", "attachment; filename=\"t1.csv\"");
 		try {
 			
-			URLConnection openConnection = new URL("https://www.dati.gov.it/api/3/action/package_show?id=537c1138-4c5f-41bb-aec8-862954b67b28").openConnection();
-			openConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
-			InputStream in = openConnection.getInputStream();
+			 URLConnection openConnection = new URL("https://www.dati.gov.it/api/3/action/package_show?id=537c1138-4c5f-41bb-aec8-862954b67b28").openConnection();
+			 openConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
+			 InputStream in = openConnection.getInputStream();
 			
 			 String data = "";
 			 String line = "";
@@ -70,14 +72,24 @@ public class StreamingResponseController {
     
     public static void download(String url, String fileName) {
 	    try {
-	    	/*
-	    	InputStream in = URI.create(url).toURL().openStream();
-	    	System.out.println("PD1");
-	        //Files.copy(in, Paths.get(fileName));
-	    	IOUtils.copy(in, new FileOutputStream(new File(fileName)));
-	    	*/
-	    	FileUtils.
-	    } catch (Exception e) {
+	    	/*prova 1
+	    	 * InputStream in = URI.create(url).toURL().openStream();
+	    	System.out.println("prova errore");
+	        Files.copy(in, Paths.get(fileName));
+	        System.out.println("prova errore 2");
+	        in.close();*/
+
+	    	 BufferedInputStream inputStream = new BufferedInputStream(new URL(url).openStream());  
+	    	FileOutputStream fileOS = new FileOutputStream("t1-prova.csv");
+	    	byte data[] = new byte[1024];
+	    	int byteContent;
+	    	while ((byteContent = inputStream.read(data, 0, 1024)) != -1) {
+	    	       fileOS.write(data, 0, byteContent);
+	    	}
+	    	fileOS.close();
+	    	inputStream.close();
+	    	
+	    } catch (IOException e) {
 	    	System.out.println("ciao");
 	    }
 	}
