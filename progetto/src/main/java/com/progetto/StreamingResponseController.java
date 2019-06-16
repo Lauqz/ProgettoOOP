@@ -12,10 +12,9 @@ import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Scanner;
-
+import org.apache.commons.io.*;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
-import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -24,11 +23,14 @@ import org.json.simple.JSONValue;
 public class StreamingResponseController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public void getSteamingFile(HttpServletResponse response) throws Exception {
-//    File f = new File("C:\\Users\\guido\\Download\\t1.csv");
-      boolean b = true;
-      if(b/*f.exists() && !f.isDirectory()*/){
-		response.setContentType("application/excel");
-		response.setHeader("Content-Disposition", "attachment; filename=\"t1.csv\"");
+    	
+      File f = new File("t1.csv");
+      
+      if(!f.exists() && !f.isDirectory()){
+    	  
+		//response.setContentType("text/csv"); SERVONO??
+		//response.setHeader("Content-Disposition", "attachment; filename=\"test.csv");
+    	  
 		try {
 			
 			 URLConnection openConnection = new URL("https://www.dati.gov.it/api/3/action/package_show?id=537c1138-4c5f-41bb-aec8-862954b67b28").openConnection();
@@ -38,39 +40,45 @@ public class StreamingResponseController {
 			 String data = "";
 			 String line = "";
 			 try {
-			   InputStreamReader inR = new InputStreamReader( in );
-			   BufferedReader buf = new BufferedReader( inR );
+			   InputStreamReader inR = new InputStreamReader(in);
+			   BufferedReader buf = new BufferedReader(inR);
 			  
-			   while ( ( line = buf.readLine() ) != null ) {
-				   data+= line;
-				   System.out.println( line );
+			   while (( line = buf.readLine()) != null) {
+				   data+=line;
+				   System.out.println(line);
 			   }
+			   
 			 } finally {
 			   in.close();
 			 }
+			 
 			JSONObject obj = (JSONObject) JSONValue.parseWithException(data); 
 			JSONObject objI = (JSONObject) (obj.get("result"));
 			JSONArray objA = (JSONArray) (objI.get("resources"));
 			
 			for(Object o: objA){
-			    if ( o instanceof JSONObject ) {
+			    if (o instanceof JSONObject) {
 			        JSONObject o1 = (JSONObject)o; 
 			        String format = (String)o1.get("format");
-			        String urlD = (String)o1.get("url");
+			        String urlA = (String)o1.get("url"); //urlD
+			        URL urlD = new URL (urlA); //prova 3
+			        URL urlProva = new URL ("https://docs.google.com/spreadsheets/d/e/2PACX-1vT6GDZNWIJgVmd3GLlEL4dPA-B_VkatLA--B4EPWhvTYRs8u244QXeaE8Ij7ikJsuUj9oyBnvH6OAGL/pub?gid=67122230&single=true&output=csv");
 			        System.out.println(format + " | " + urlD);
 			        if(format.equals("csv")) {
-			        	download(urlD, "t1.csv");
+			        	File fname = new File ("t1.csv"); //prova 3
+			        	download(urlProva, fname); //"t1.csv" al posto di fname
 			        }
 			    }
 			}
 			System.out.println( "OK" );
-		} catch (Exception e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-    }
+      else System.out.println("File presente, impossibile scaricare");
+}
     
-    public static void download(String url, String fileName) {
+    public static void download(URL url, File fileName) {
 	    try {
 	    	/*prova 1
 	    	 * InputStream in = URI.create(url).toURL().openStream();
@@ -79,7 +87,8 @@ public class StreamingResponseController {
 	        System.out.println("prova errore 2");
 	        in.close();*/
 
-	    	 BufferedInputStream inputStream = new BufferedInputStream(new URL(url).openStream());  
+	    	/*prova 2
+	    	 *  BufferedInputStream inputStream = new BufferedInputStream(new URL(url).openStream());  
 	    	FileOutputStream fileOS = new FileOutputStream("t1-prova.csv");
 	    	byte data[] = new byte[1024];
 	    	int byteContent;
@@ -87,7 +96,13 @@ public class StreamingResponseController {
 	    	       fileOS.write(data, 0, byteContent);
 	    	}
 	    	fileOS.close();
-	    	inputStream.close();
+	    	inputStream.close();*/
+	    	
+	    	
+	    	//prova 3
+	    	System.out.println("err1");
+	    	FileUtils.copyURLToFile(url, fileName);
+	    	System.out.println("err2");
 	    	
 	    } catch (IOException e) {
 	    	System.out.println("ciao");
