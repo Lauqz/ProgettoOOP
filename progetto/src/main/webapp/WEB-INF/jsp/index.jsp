@@ -7,7 +7,7 @@
 </head>
 <body>
     <form>
-	<input type='button' src='http://localhost:8080/downloadTestFile'> Scarica il file </input>
+	<input type='button' src='http://localhost:8080/'> Scarica il file </input>
     </form>   
 </body>
 </html>

@@ -1,5 +1,6 @@
 package com.progetto;
 
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,10 +20,10 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
-@RestController  // It is also possible to @Controller.
+@Controller
 public class StreamingResponseController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public void getSteamingFile(HttpServletResponse response) throws Exception {
+    public String getSteamingFile(HttpServletResponse response) throws Exception {
     	
       File f = new File("t1.csv");
       
@@ -60,13 +61,13 @@ public class StreamingResponseController {
 			    if (o instanceof JSONObject) {
 			        JSONObject o1 = (JSONObject)o; 
 			        String format = (String)o1.get("format");
-			        String urlA = (String)o1.get("url"); //urlD
-			        URL urlD = new URL (urlA); //prova 3
-			        URL urlProva = new URL ("https://docs.google.com/spreadsheets/d/e/2PACX-1vT6GDZNWIJgVmd3GLlEL4dPA-B_VkatLA--B4EPWhvTYRs8u244QXeaE8Ij7ikJsuUj9oyBnvH6OAGL/pub?gid=67122230&single=true&output=csv");
+			        String urlA = (String)o1.get("url");
+			        urlA = urlA.replaceAll("&amp;","&");
+			        URL urlD = new URL (urlA);
 			        System.out.println(format + " | " + urlD);
 			        if(format.equals("csv")) {
-			        	File fname = new File ("t1.csv"); //prova 3
-			        	download(urlProva, fname); //"t1.csv" al posto di fname
+			        	File fname = new File ("t1.csv");
+			        	download(urlD, fname);
 			        }
 			    }
 			}
@@ -74,38 +75,17 @@ public class StreamingResponseController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return "index";
 	}
       else System.out.println("File presente, impossibile scaricare");
+      return "index";
 }
     
     public static void download(URL url, File fileName) {
 	    try {
-	    	/*prova 1
-	    	 * InputStream in = URI.create(url).toURL().openStream();
-	    	System.out.println("prova errore");
-	        Files.copy(in, Paths.get(fileName));
-	        System.out.println("prova errore 2");
-	        in.close();*/
-
-	    	/*prova 2
-	    	 *  BufferedInputStream inputStream = new BufferedInputStream(new URL(url).openStream());  
-	    	FileOutputStream fileOS = new FileOutputStream("t1-prova.csv");
-	    	byte data[] = new byte[1024];
-	    	int byteContent;
-	    	while ((byteContent = inputStream.read(data, 0, 1024)) != -1) {
-	    	       fileOS.write(data, 0, byteContent);
-	    	}
-	    	fileOS.close();
-	    	inputStream.close();*/
-	    	
-	    	
-	    	//prova 3
-	    	System.out.println("err1");
-	    	FileUtils.copyURLToFile(url, fileName);
-	    	System.out.println("err2");
-	    	
+	    	FileUtils.copyURLToFile(url, fileName); 	
 	    } catch (IOException e) {
-	    	System.out.println("ciao");
+	    	System.out.println("Errore di Input/Output" + e);
 	    }
 	}
 }
