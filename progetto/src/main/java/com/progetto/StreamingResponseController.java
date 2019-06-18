@@ -7,11 +7,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.lang.reflect.Array;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 import org.apache.commons.io.*;
 import org.apache.commons.csv.CSVFormat;
@@ -75,9 +78,35 @@ public class StreamingResponseController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return "index";
 	}
       else System.out.println("File presente, impossibile scaricare");
+      
+      try {
+    	 Scanner var = new Scanner(new BufferedReader(new FileReader ("t1.csv")));
+    	 ArrayList<Catasto> obj = new ArrayList();
+    	 String data = var.nextLine();
+    	 String data2 = null;
+    	 String full = null;
+    	 int j = 0;
+    	 while (var.hasNextLine()) {
+    		 data = var.nextLine();
+    		 data2 = var.nextLine();
+    		 full = data + data2;
+    		 ArrayList<String> parts = new ArrayList();
+    		 String[] parti = full.split(",");
+    		 for (int i = 0; i<12; i++) {
+    			 parts.add(parti[i]);
+    		 }
+   			 Catasto foo = new Catasto(parts);
+    		 obj.add(foo);
+    		 System.out.println(foo.toString());
+    	}
+    	 var.close();
+      }
+      catch (IOException e) {
+    	  System.out.println("Errore di lettura" + e);
+      }
+      
       return "index";
 }
     

@@ -26,5 +26,7 @@ public class Catasto extends Statistiche {
 		ERP = parse.get(11);
 	}
 	
-
+	public String toString() {
+		return "Oggetto" + ID + "," + Tipo + "," + Ubicazione + ERP;
+	}
 }
