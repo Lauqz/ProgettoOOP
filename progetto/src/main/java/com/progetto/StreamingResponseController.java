@@ -1,24 +1,25 @@
 package com.progetto;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
+import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
+
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.lang.reflect.Array;
-import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.apache.commons.io.*;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -83,19 +84,37 @@ public class StreamingResponseController {
       
       try {
     	 Scanner var = new Scanner(new BufferedReader(new FileReader ("t1.csv")));
-    	 ArrayList<Catasto> obj = new ArrayList();
+    	 ArrayList<Catasto> obj = new ArrayList<Catasto>();
     	 String data = var.nextLine();
     	 String data2 = null;
+    	 String data3 = null;
     	 String full = null;
-    	 int j = 0;
+
     	 while (var.hasNextLine()) {
     		 data = var.nextLine();
     		 data2 = var.nextLine();
+    		 if (data2.endsWith("--") && (var.nextLine()).startsWith("V:")) {
+    			 data2+=data3;
+    		 }
     		 full = data + data2;
-    		 ArrayList<String> parts = new ArrayList();
+    		 
+    		 Matcher m = Pattern.compile("\"[^\"]*\"").matcher(full);
+    		 StringBuffer sb = new StringBuffer();
+    		 while(m.find()) {
+    		       m.appendReplacement(sb, m.group().replaceAll(",", "."));
+    		 }
+    		 m.appendTail(sb);
+
+    		 full = sb.toString();
+    		 full = full.replaceAll("\"","");
+    		 System.out.println(full);
+    		 
+    		 ArrayList<String> parts = new ArrayList<String>();
     		 String[] parti = full.split(",");
+    		 System.out.println(Arrays.toString(parti)); //prova stampa
+
     		 for (int i = 0; i<12; i++) {
-    			 parts.add(parti[i]);
+    				 parts.add(parti[i]);
     		 }
    			 Catasto foo = new Catasto(parts);
     		 obj.add(foo);
@@ -103,12 +122,13 @@ public class StreamingResponseController {
     	}
     	 var.close();
       }
-      catch (IOException e) {
+      catch (Exception e) {
     	  System.out.println("Errore di lettura" + e);
       }
       
       return "index";
 }
+    
     
     public static void download(URL url, File fileName) {
 	    try {
@@ -117,4 +137,6 @@ public class StreamingResponseController {
 	    	System.out.println("Errore di Input/Output" + e);
 	    }
 	}
+    
+    
 }
