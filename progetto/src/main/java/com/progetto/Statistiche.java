@@ -1,7 +1,11 @@
 package com.progetto;
 
-public class Statistiche {
+import java.io.Serializable;
+
+
+public class Statistiche implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
 	protected int Altitudine;
 	protected double Frequenza;
 	protected String Operatore;

@@ -2,12 +2,8 @@ package com.progetto;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
-import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
 
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
@@ -32,9 +28,6 @@ public class StreamingResponseController {
       File f = new File("t1.csv");
       
       if(!f.exists() && !f.isDirectory()){
-    	  
-		//response.setContentType("text/csv"); SERVONO??
-		//response.setHeader("Content-Disposition", "attachment; filename=\"test.csv");
     	  
 		try {
 			
@@ -121,6 +114,10 @@ public class StreamingResponseController {
     		 System.out.println(foo.toString());
     	}
     	 var.close();
+    	 
+    	 ObjectOutputStream out = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream("oggetti.dat")));
+   	  	 out.writeObject(obj);
+   	  	 out.close();
       }
       catch (Exception e) {
     	  System.out.println("Errore di lettura" + e);
