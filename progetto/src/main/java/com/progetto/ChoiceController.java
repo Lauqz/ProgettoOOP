@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
@@ -55,4 +56,11 @@ public class ChoiceController {
         
         return json;
     }
+	
+	@RequestMapping(value = "/stat", method = RequestMethod.GET)
+    public String getStats(@RequestParam(defaultValue="Guest") String name,
+            @RequestParam(required = false) String adult) throws Exception {
+		return " ";
+		
+	}
 }

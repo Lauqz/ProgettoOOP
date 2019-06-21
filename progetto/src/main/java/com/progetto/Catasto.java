@@ -29,6 +29,7 @@ public class Catasto extends Statistiche implements Serializable {
 		ERP = parse.get(11);
 	}
 	
+	@Override
 	public String toString() {
 		return "Oggetto" + ID + "," + Tipo + "," + Ubicazione + ERP;
 	}

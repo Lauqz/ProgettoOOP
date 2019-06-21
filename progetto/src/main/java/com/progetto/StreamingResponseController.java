@@ -23,7 +23,7 @@ import org.json.simple.JSONValue;
 @Controller
 public class StreamingResponseController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String getSteamingFile(HttpServletResponse response) throws Exception {
+    public String getSteamingFile() throws Exception {
     	
       File f = new File("t1.csv");
       
