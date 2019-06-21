@@ -75,54 +75,57 @@ public class StreamingResponseController {
 	}
       else System.out.println("File presente, impossibile scaricare");
       
-      try {
-    	 Scanner var = new Scanner(new BufferedReader(new FileReader ("t1.csv")));
-    	 ArrayList<Catasto> obj = new ArrayList<Catasto>();
-    	 String data = var.nextLine();
-    	 String data2 = null;
-    	 String data3 = null;
-    	 String full = null;
-
-    	 while (var.hasNextLine()) {
-    		 data = var.nextLine();
-    		 data2 = var.nextLine();
-    		 if (data2.endsWith("--") && (var.nextLine()).startsWith("V:")) {
-    			 data2+=data3;
-    		 }
-    		 full = data + data2;
-    		 
-    		 Matcher m = Pattern.compile("\"[^\"]*\"").matcher(full);
-    		 StringBuffer sb = new StringBuffer();
-    		 while(m.find()) {
-    		       m.appendReplacement(sb, m.group().replaceAll(",", "."));
-    		 }
-    		 m.appendTail(sb);
-
-    		 full = sb.toString();
-    		 full = full.replaceAll("\"","");
-    		 System.out.println(full);
-    		 
-    		 ArrayList<String> parts = new ArrayList<String>();
-    		 String[] parti = full.split(",");
-    		 System.out.println(Arrays.toString(parti)); //prova stampa
-
-    		 for (int i = 0; i<12; i++) {
-    				 parts.add(parti[i]);
-    		 }
-   			 Catasto foo = new Catasto(parts);
-    		 obj.add(foo);
-    		 System.out.println(foo.toString());
-    	}
-    	 var.close();
-    	 
-    	 ObjectOutputStream out = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream("oggetti.dat")));
-   	  	 out.writeObject(obj);
-   	  	 out.close();
-      }
-      catch (Exception e) {
-    	  System.out.println("Errore di lettura" + e);
-      }
       
+      File o = new File("oggetti.dat");
+      if(!o.exists() && !o.isDirectory()){
+    	  try {
+    		  Scanner var = new Scanner(new BufferedReader(new FileReader ("t1.csv")));
+    		  ArrayList<Catasto> obj = new ArrayList<Catasto>();
+    		  String data = var.nextLine();
+    		  String data2 = null;
+    		  String data3 = null;
+    		  String full = null;
+
+    		  while (var.hasNextLine()) {
+    			  data = var.nextLine();
+    			  data2 = var.nextLine();
+    			  if (data2.endsWith("--") && (var.nextLine()).startsWith("V:")) {
+    				  data2+=data3;
+    			  }
+    			  full = data + data2;
+    		 
+    			  Matcher m = Pattern.compile("\"[^\"]*\"").matcher(full);
+    			  StringBuffer sb = new StringBuffer();
+    			  while(m.find()) {
+    				  m.appendReplacement(sb, m.group().replaceAll(",", "."));
+    			  }
+    			  m.appendTail(sb);
+
+    			  full = sb.toString();
+    			  full = full.replaceAll("\"","");
+    			  System.out.println(full);
+    		 
+    			  ArrayList<String> parts = new ArrayList<String>();
+    			  String[] parti = full.split(",");
+    			  System.out.println(Arrays.toString(parti)); //prova stampa
+
+    			  for (int i = 0; i<12; i++) {
+    				  parts.add(parti[i]);
+    			  }
+    			  Catasto foo = new Catasto(parts);
+    			  obj.add(foo);
+    			  System.out.println(foo.toString());
+    		  }
+    		  var.close();
+    	 
+    		  ObjectOutputStream out = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream("oggetti.dat")));
+   	  	 	  out.writeObject(obj);
+   	  	 	  out.close();
+    	  }
+    	  catch (Exception e) {
+    		  System.out.println("Errore di lettura" + e);
+    	  }
+      }
       return "index";
 }
     

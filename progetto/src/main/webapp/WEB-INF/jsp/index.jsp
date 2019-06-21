@@ -16,11 +16,11 @@
     </h1>
 </header>
 <body bgcolor=#AFEEEE>
-    <button class="button" href="/meta">
+    <button class="button" onclick="window.location.href='/meta'">
         Visualizza metadati della classe
     </button>
     <hr>
-    <button class="button" href="/obj">
+    <button class="button" onclick="window.location.href='/obj'">
         Visualizza oggetti della classe
     </button>
     <hr>
@@ -28,19 +28,19 @@
         Genera statistiche sui dati
     </button>
     <hr>
-    <form action="/stat" method="POST" id="js">
-        <label for="attr"><strong>Inserisci l'attributo</strong></label>
-        <input name="attr" type="radio"> Operatore </input>
-        <input name="attr" type="radio"> Altitudine </input>
-        <input name="attr" type="radio"> Frequenza </input>
+    <form action="/stat" method="GET" id="js">
+        <label for="Att"><strong>Inserisci l'attributo</strong></label>
+        <input name="Att" type="radio" value=0 checked> Operatore </input>
+        <input name="Att" type="radio" value=1> Altitudine </input>
+        <input name="Att" type="radio" value=2> Frequenza </input>
         <br>
-        <label for="op"><strong>Inserisci la statistica</strong></label>
-        <input name="op" type="radio"> Media </input>
-        <input name="op" type="radio"> Minimo </input>
-        <input name="op" type="radio"> Massimo </input>
-        <input name="op" type="radio"> Somma </input>
-        <input name="op" type="radio"> Deviazione standard </input>
-        <input name="op" type="radio"> Conta </input>
+        <label for="Stat"><strong>Inserisci la statistica</strong></label>
+        <input name="Stat" type="radio" value=0 checked> Media </input>
+        <input name="Stat" type="radio" value=1> Minimo </input>
+        <input name="Stat" type="radio" value=2> Massimo </input>
+        <input name="Stat" type="radio" value=3> Somma </input>
+        <input name="Stat" type="radio" value=4> Deviazione standard </input>
+        <input name="Stat" type="radio" value=5> Conta </input>
         <br>
         <input type="submit" value="Cerca">
     </form>

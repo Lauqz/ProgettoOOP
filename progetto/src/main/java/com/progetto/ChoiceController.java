@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -58,9 +60,129 @@ public class ChoiceController {
     }
 	
 	@RequestMapping(value = "/stat", method = RequestMethod.GET)
-    public String getStats(@RequestParam(defaultValue="Guest") String name,
-            @RequestParam(required = false) String adult) throws Exception {
-		return " ";
+    public String getStats(@RequestParam int Att,
+            @RequestParam int Stat) throws Exception {
+		String response = null;
+		switch (Att) {
+		case 0: ArrayList<String> temp0 = allOperatori();
+		switch (Stat) {
+		case 0: response = "Non e' possibile eseguire questa operazione su questo tipo di dato"; break;
+		case 1: response = "Non e' possibile eseguire questa operazione su questo tipo di dato"; break;
+		case 2: response = "Non e' possibile eseguire questa operazione su questo tipo di dato"; break;
+		case 3: response = "Non e' possibile eseguire questa operazione su questo tipo di dato"; break;
+		case 4: response = "Non e' possibile eseguire questa operazione su questo tipo di dato"; break;
+		case 5:
+			ArrayList<String> uniques = new ArrayList<String>();
+			int c = 0;
+			for (int i = 0; i < temp0.size(); i++) {
+				for (int j = 0; j < temp0.size(); j++) {
+					if (i == j) {}
+					else {
+						if (temp0.get(i).equals(temp0.get(j))) {
+						c++;
+						}
+					}
+			}
+			if (c == 0) 
+				uniques.add(temp0.get(i));
+			c = 0;
+		}
+		response = uniques.toString();
+		break;
+		}
+		break;
 		
+		case 1: ArrayList<Integer> temp1 = allAltitudine();
+		switch (Stat) {
+		case 0: response="pupu"; break;
+		case 1: response="pupu"; break;
+		case 2: response="pupu"; break;
+		case 3: response="pupu"; break;
+		case 4: response="pupu"; break;
+		case 5: response="pupu"; break;
+		}
+		break;
+		
+		case 2: ArrayList<Double> temp2 = allFrequenza();
+		switch (Stat) {
+		case 0: response="pupu"; break;
+		case 1: response="pupu"; break;
+		case 2: response="pupu"; break;
+		case 3: response="pupu"; break;
+		case 4: response="pupu"; break;
+		case 5: response="pupu"; break;
+		}
+		break;
+		}
+		
+		return response;
+	}
+	
+	
+	protected static ArrayList<String> allOperatori(){
+		ArrayList<Catasto> arr = new ArrayList<Catasto>();
+		ArrayList<String> temp = new ArrayList<String>();
+		
+		try {
+			ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(new FileInputStream("oggetti.dat")));
+			arr = (ArrayList<Catasto>) in.readObject();
+			for (Catasto s : arr) {
+				temp.add(s.getOperatore());
+			}
+			in.close();
+			
+		}
+		catch (ClassNotFoundException e) {
+			System.out.println("Errore  "+ e);
+		} 
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		return temp;
+	}
+	
+	protected static ArrayList<Double> allFrequenza(){
+		ArrayList<Catasto> arr = new ArrayList<Catasto>();
+		ArrayList<Double> temp = new ArrayList<Double>();
+		
+		try {
+			ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(new FileInputStream("oggetti.dat")));
+			arr = (ArrayList<Catasto>) in.readObject();
+			for (Catasto s : arr) {
+				temp.add(s.getFrequenza());
+			}
+			in.close();
+			
+		}
+		catch (ClassNotFoundException e) {
+			System.out.println("Errore  "+ e);
+		} 
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		return temp;
+		}
+
+	
+	protected static ArrayList<Integer> allAltitudine(){
+		ArrayList<Catasto> arr = new ArrayList<Catasto>();
+		ArrayList<Integer> temp = new ArrayList<Integer>();
+	
+		try {
+			ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(new FileInputStream("oggetti.dat")));
+			arr = (ArrayList<Catasto>) in.readObject();
+			for (Catasto s : arr) {
+				temp.add(s.getAltitudine());
+			}
+			in.close();
+		
+		}
+		catch (ClassNotFoundException e) {
+			System.out.println("Errore  "+ e);
+		} 
+		catch (IOException e) {
+			e.printStackTrace();
+	}
+		return temp;
 	}
 }

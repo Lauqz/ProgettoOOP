@@ -33,4 +33,52 @@ public class Catasto extends Statistiche implements Serializable {
 	public String toString() {
 		return "Oggetto" + ID + "," + Tipo + "," + Ubicazione + ERP;
 	}
+	
+	public String getOperatore(){
+		return Operatore;
+	}
+	
+	public String getID(){
+		return ID;
+	}
+	
+	public String getTipo(){
+		return Tipo;
+	}
+	
+	public String getUbicazione(){
+		return Ubicazione;
+	}
+	
+	public String getProvincia(){
+		return Provincia;
+	}
+		
+	public String getLatitudine(){
+		return Latitudine;
+	}
+	
+	public String getLongitudine(){
+		return Longitudine;
+	}
+	
+	public int getAltitudine(){
+		return Altitudine;
+	}
+	
+	public String getChannel(){
+		return Channel;
+	}
+	
+	public Double getFrequenza(){
+		return Frequenza;
+	}
+	
+	public String getProgetto(){
+		return Progetto;
+	}
+	
+	public String getERP(){
+		return ERP;
+	}
 }
