@@ -54,7 +54,7 @@
     <br>
     <form action="/filters" method="POST" id="fltr">
         <label for="Att"><strong>Inserisci l'attributo </strong></label>
-        <input name="Att" type="radio" value=1> Altitudine </input>
+        <input name="Att" type="radio" value=1 checked> Altitudine </input>
         <input name="Att" type="radio" value=2> Frequenza </input>
         <br>
         <label for="Stat"><strong>Inserisci i filtri </strong></label>
@@ -62,17 +62,17 @@
         <input name="Stat" type="radio" value=0 checked> <= </input>
         <input name="Stat" type="radio" value=1> >= </input>
         <br>
-        <input name="Num" type="text" placeholder="Numero"> Numero </input>
+        <input name="Num" type="text" placeholder="Numero" default=""> Valore </input>
         <br>
-        <input name="Logic" type="radio" value=0> Or </input>
+        <input name="Logic" type="radio" value=0 checked> Or </input>
         <input name="Logic" type="radio" value=1> And </input>
         <input name="Logic" type="radio" value=null> -- </input>
         <br>
-        <input name="Stat1" type="radio" value=0> <= </input>
+        <input name="Stat1" type="radio" value=0 checked> <= </input>
         <input name="Stat1" type="radio" value=1> >= </input>
         <input name="Stat1" type="radio" value=null> -- </input>
         <br>
-        <input name="Num1" type="text" placeholder="Numero" default=null> Numero </input>
+        <input name="Num1" type="text" placeholder="SecondoNumero" default=null> Secondo Valore </input>
         <br>
         <input type="submit" value="Cerca">
     </form>

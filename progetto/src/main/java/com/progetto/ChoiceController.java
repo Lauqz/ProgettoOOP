@@ -221,11 +221,139 @@ public class ChoiceController {
 	
 	
 	@RequestMapping(value = "/filters", method = RequestMethod.POST, produces="application/json")
-    public HashMap<String,String> getFilters(@RequestParam int Att,
-            @RequestParam int Stat, @RequestParam int Num,
+    public String getFilters(@RequestParam int Att,
+            @RequestParam int Stat, @RequestParam String Num,
             @RequestParam int Logic,@RequestParam int Stat1,
-            @RequestParam int Num1) throws Exception {
-		return;
+            @RequestParam String Num1) throws Exception {
+		ArrayList<Catasto> carr = new ArrayList<Catasto>();
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
+		mapper.enable(SerializationFeature.INDENT_OUTPUT);
+		String allJson = new String();
+		if (Num.equals("")) {
+			HashMap<String, String> res = new HashMap<String, String>();
+			System.out.println("errore");
+			res.put("errore", "Inserimento non valido");
+			return "errore";
+		}
+		    
+		else {
+			if (Num1.equals("")) 
+			{
+				
+				switch (Att)
+				{
+				case 1:
+					int value=Integer.parseInt(Num);
+					carr=findmajminAltid(Stat,value);
+				break;
+				case 2:
+					double value_1=Double.parseDouble(Num);
+					carr=findmajminFreq(Stat,value_1);
+			    break;
+				}
+			}
+			else {
+				switch (Att)
+				{
+				case 1:
+					int value=Integer.parseInt(Num);
+					carr=findmajminAltid(Stat,value);
+					ArrayList<Catasto> carr1 = new ArrayList<Catasto>();
+					switch (Stat1)
+					{
+					case 0:
+						int value2=Integer.parseInt(Num);
+						int value2_1=Integer.parseInt(Num1);
+						carr=findmajminAltid(Stat,value2);
+						carr1=findmajminAltid(Stat1, value2_1);
+						if (Logic == 0) {
+							carr.addAll(carr1);
+						}
+						else {
+							if (Logic == 1)
+							{
+								carr = IntersectionAlt(carr,carr1);
+								System.out.println("ciao1");
+							}
+								
+						}
+							
+					break;
+					case 1:
+						int value3=Integer.parseInt(Num);
+						int value3_1=Integer.parseInt(Num1);
+						carr=findmajminAltid(Stat,value3);
+						carr1=findmajminAltid(Stat1,value3_1);
+						if (Logic == 0) {
+							carr.addAll(carr1);
+						}
+						else {
+							if (Logic == 1)
+							{
+								carr = IntersectionAlt(carr,carr1);
+								System.out.println("ciao2");
+							}
+								
+						}
+				    break;
+					}
+				break;
+				case 2:
+					double value002=Double.parseDouble(Num);
+					carr=findmajminFreq(Stat,value002);
+					ArrayList<Catasto> carr2 = new ArrayList<Catasto>();
+					switch (Stat1)
+					{
+					case 0:
+						double value02=Double.parseDouble(Num);
+						double value02_1=Double.parseDouble(Num1);
+						carr=findmajminFreq(Stat,value02);
+						carr1=findmajminFreq(Stat1, value02_1);
+						if (Logic == 0) {
+							carr.addAll(carr2);
+						}
+						else {
+							if (Logic == 1)
+							{
+								carr = IntersectionFreq(carr,carr2);
+								System.out.println("ciao1");
+							}
+								
+						}
+							
+					break;
+					case 1:
+						double value03=Double.parseDouble(Num);
+						double value03_1=Double.parseDouble(Num1);
+						carr=findmajminFreq(Stat,value03);
+						carr1=findmajminFreq(Stat1,value03_1);
+						if (Logic == 0) {
+							carr.addAll(carr2);
+						}
+						else {
+							if (Logic == 1)
+							{
+								carr = IntersectionFreq(carr,carr2);
+								System.out.println("ciao2");
+							}
+								
+						}
+				    break;
+					}
+				break;
+
+				}
+			}
+				
+		}
+		
+		for (Catasto s : carr) {
+			String jsonString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(s);
+			allJson += jsonString + "\n";
+		}
+		return allJson;
+		
 	}
 	
 	
@@ -295,4 +423,138 @@ public class ChoiceController {
 	}
 		return temp;
 	}
+	protected static ArrayList<Catasto> getCatasti()
+	{
+		ArrayList<Catasto> arr = new ArrayList<Catasto>();
+		
+		try {
+			ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(new FileInputStream("oggetti.dat")));
+			arr = (ArrayList<Catasto>) in.readObject();
+			
+		
+		}
+		catch (ClassNotFoundException e) {
+			System.out.println("Errore  "+ e);
+		} 
+		catch (IOException e) {
+			e.printStackTrace();
+	}
+		return arr;
+	}
+	protected static ArrayList<Catasto> findmajminAltid(int c,int lim)
+	{
+		ArrayList<Catasto> cat = new ArrayList<Catasto>();
+		ArrayList<Catasto> filtered = new ArrayList<Catasto>();
+		cat=getCatasti();
+		switch (c)
+		{
+		case 0: 
+			for (Catasto s : cat)
+			{
+				if (s.getAltitudine() <= lim) {
+					filtered.add(s);
+				}
+			}
+		break;
+		case 1:
+			for (Catasto s : cat)
+			{
+				if (s.getAltitudine() >= lim) {
+					filtered.add(s);
+				}
+			}
+		break;
+		}
+		return filtered;
+	}
+	protected static ArrayList<Catasto> findmajminFreq(int c,Double lim)
+	{
+		ArrayList<Catasto> cat = new ArrayList<Catasto>();
+		ArrayList<Catasto> filtered = new ArrayList<Catasto>();
+		cat=getCatasti();
+		switch (c)
+		{
+		case 0: 
+			for (Catasto s : cat)
+			{
+				if (s.getFrequenza() <= lim) {
+					filtered.add(s);
+				}
+			}
+		break;
+		case 1:
+			for (Catasto s : cat)
+			{
+				if (s.getFrequenza() >= lim) {
+					filtered.add(s);
+				}
+			}
+		break;
+		}
+		return filtered;
+	}
+	
+	public ArrayList<Catasto> IntersectionAlt(ArrayList<Catasto> list1, ArrayList<Catasto> list2)
+	{
+	ArrayList<Catasto> cat = new ArrayList<Catasto>();
+	
+		
+	for(Catasto c1 : list1) {
+		for(Catasto c2: list2) {
+			if(ugualeAlt(c1, c2)) {
+				cat.add(c1);
+				
+			}
+		}
+	}
+		
+		
+				
+				
+			
+			
+	
+	return cat;	
+	}
+	public ArrayList<Catasto> IntersectionFreq(ArrayList<Catasto> list1, ArrayList<Catasto> list2)
+	{
+	ArrayList<Catasto> cat = new ArrayList<Catasto>();
+	
+		
+	for(Catasto c1 : list1) {
+		for(Catasto c2: list2) {
+			if(ugualeFreq(c1, c2)) {
+				cat.add(c1);
+				
+			}
+		}
+	}
+		
+		
+				
+				
+			
+			
+	
+	return cat;	
+	}
+	private boolean ugualeAlt(Catasto c1, Catasto c2) {
+		
+						if(c1.getAltitudine() == c2.getAltitudine()) {
+											return true;
+													
+						}
+										
+		return false;
+	}
+	private boolean ugualeFreq(Catasto c1, Catasto c2) {
+		
+		if(c1.getFrequenza() == c2.getFrequenza()) {
+							return true;
+									
+		}
+						
+		return false;
+}
+	
 }

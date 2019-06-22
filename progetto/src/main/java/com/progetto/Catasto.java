@@ -95,4 +95,16 @@ public class Catasto extends Statistiche implements Serializable {
 	public String getERP(){
 		return ERP;
 	}
+	
+	@JsonIgnore
+	public boolean uguale(Catasto c)
+	{
+		if (this.Operatore == c.getOperatore() && this.ID == c.getID() && this.Tipo == c.getTipo() && this.Ubicazione == c.getUbicazione() && this.Provincia == c.getProvincia() && this.Latitudine == c.getLatitudine() && this.Longitudine == c.getLongitudine() && this.Frequenza == c.getFrequenza() && this.Channel == c.getChannel() && this.Altitudine == c.getAltitudine() && this.Progetto == c.getProgetto() && this.ERP == c.getERP() ) {
+			return true;
+		}
+		else {
+			
+			return false;
+		}
+	}
 }
