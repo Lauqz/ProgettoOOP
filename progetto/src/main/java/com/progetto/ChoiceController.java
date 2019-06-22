@@ -220,6 +220,15 @@ public class ChoiceController {
 	}
 	
 	
+	@RequestMapping(value = "/filters", method = RequestMethod.POST, produces="application/json")
+    public HashMap<String,String> getFilters(@RequestParam int Att,
+            @RequestParam int Stat, @RequestParam int Num,
+            @RequestParam int Logic,@RequestParam int Stat1,
+            @RequestParam int Num1) throws Exception {
+		return;
+	}
+	
+	
 	protected static ArrayList<String> allOperatori(){
 		ArrayList<Catasto> arr = new ArrayList<Catasto>();
 		ArrayList<String> temp = new ArrayList<String>();

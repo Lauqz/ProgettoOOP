@@ -72,7 +72,7 @@
         <input name="Stat1" type="radio" value=1> >= </input>
         <input name="Stat1" type="radio" value=null> -- </input>
         <br>
-        <input name="Num" type="text" placeholder="Numero" default=null> Numero </input>
+        <input name="Num1" type="text" placeholder="Numero" default=null> Numero </input>
         <br>
         <input type="submit" value="Cerca">
     </form>
