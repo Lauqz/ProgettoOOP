@@ -5,13 +5,13 @@
 
 il seguente file andrà ad introdurre ed esplicare il progetto svolto dagli studenti Antici Francesco e Laudenzi Guido, valido per il corso di programmazione ad oggetti a.a. 2018/2019.
 
-### How to run 
+### Come eseguire
 
 Posizionarsi tramite command line nella cartella /progetto contente i file eseguibili e digitare l'istruzione: 
 ```
 mvn spring-boot:run
 ```
-###  Getting Started
+###  Iniziare
 
 Una volta scaricato il progetto dal sito <https://github.com> e aperto con un editor per eseguire progetti creati con framework spring, si visiti il link <http://localhost:8080/>.
 
@@ -28,3 +28,7 @@ La schermata permetterà l'esecuzione di diverse operazioni:
 * calcolo statistiche: permette di calcolare delle statistiche, su richiesta del client, sui dati del file CSV ;
 
 * filtraggio dati: permette di eseguire filtraggi, su richiesta del client, sui dati del file CSV.
+
+# Diagrammi UML
+
+![](/Section.png)
