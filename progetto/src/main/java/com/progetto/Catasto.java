@@ -3,6 +3,8 @@ package com.progetto;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Catasto extends Statistiche implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -34,50 +36,62 @@ public class Catasto extends Statistiche implements Serializable {
 		return "Oggetto" + ID + "," + Tipo + "," + Ubicazione + ERP;
 	}
 	
+	@JsonIgnore
 	public String getOperatore(){
 		return Operatore;
 	}
 	
+	@JsonIgnore
 	public String getID(){
 		return ID;
 	}
 	
+	@JsonIgnore
 	public String getTipo(){
 		return Tipo;
 	}
 	
+	@JsonIgnore
 	public String getUbicazione(){
 		return Ubicazione;
 	}
 	
+	@JsonIgnore
 	public String getProvincia(){
 		return Provincia;
 	}
-		
+	
+	@JsonIgnore
 	public String getLatitudine(){
 		return Latitudine;
 	}
 	
+	@JsonIgnore
 	public String getLongitudine(){
 		return Longitudine;
 	}
 	
+	@JsonIgnore
 	public int getAltitudine(){
 		return Altitudine;
 	}
 	
+	@JsonIgnore
 	public String getChannel(){
 		return Channel;
 	}
 	
+	@JsonIgnore
 	public Double getFrequenza(){
 		return Frequenza;
 	}
 	
+	@JsonIgnore
 	public String getProgetto(){
 		return Progetto;
 	}
 	
+	@JsonIgnore
 	public String getERP(){
 		return ERP;
 	}

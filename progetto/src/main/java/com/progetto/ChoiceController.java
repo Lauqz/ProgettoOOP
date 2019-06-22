@@ -5,11 +5,15 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
 
@@ -25,10 +30,11 @@ import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
 public class ChoiceController {
 	
 	@SuppressWarnings("unchecked")
-	@RequestMapping(value = "/obj", method = RequestMethod.GET)
+	@RequestMapping(value = "/obj", method = RequestMethod.GET, produces="application/json")
     public String getObjects(HttpServletResponse response) throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
+		mapper.enable(SerializationFeature.INDENT_OUTPUT);
 		ArrayList<Catasto> arr = new ArrayList<Catasto>();
 		String allJson = new String();
 		try {
@@ -36,7 +42,7 @@ public class ChoiceController {
 			arr = (ArrayList<Catasto>) in.readObject();
 			for (Catasto s : arr) {
 				String jsonString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(s);
-				allJson += jsonString;
+				allJson += jsonString + "\n";
 			}
 			in.close();
 		}
@@ -46,12 +52,13 @@ public class ChoiceController {
 		return allJson;
 	}
 	
-	@RequestMapping(value = "/meta", method = RequestMethod.GET)
+	@RequestMapping(value = "/meta", method = RequestMethod.GET, produces="application/json")
     public String getMetadata(HttpServletResponse response) throws Exception {
 
 		ObjectMapper mapper = new ObjectMapper();
         SchemaFactoryWrapper visitor = new SchemaFactoryWrapper();
         mapper.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
+        mapper.enable(SerializationFeature.INDENT_OUTPUT);
         mapper.acceptJsonFormatVisitor(Catasto.class, visitor);
         JsonSchema schema = visitor.finalSchema();
         String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(schema);
@@ -59,19 +66,21 @@ public class ChoiceController {
         return json;
     }
 	
-	@RequestMapping(value = "/stat", method = RequestMethod.GET)
-    public String getStats(@RequestParam int Att,
+	@RequestMapping(value = "/stat", method = RequestMethod.GET, produces="application/json")
+    public HashMap<String,String> getStats(@RequestParam int Att,
             @RequestParam int Stat) throws Exception {
+		String data = null;
 		String response = null;
 		switch (Att) {
 		case 0: ArrayList<String> temp0 = allOperatori();
 		switch (Stat) {
-		case 0: response = "Non e' possibile eseguire questa operazione su questo tipo di dato"; break;
-		case 1: response = "Non e' possibile eseguire questa operazione su questo tipo di dato"; break;
-		case 2: response = "Non e' possibile eseguire questa operazione su questo tipo di dato"; break;
-		case 3: response = "Non e' possibile eseguire questa operazione su questo tipo di dato"; break;
-		case 4: response = "Non e' possibile eseguire questa operazione su questo tipo di dato"; break;
+		case 0: data = "Errore"; response = "Non e' possibile eseguire questa operazione su questo tipo di dato"; break;
+		case 1: data = "Errore"; response = "Non e' possibile eseguire questa operazione su questo tipo di dato"; break;
+		case 2: data = "Errore"; response = "Non e' possibile eseguire questa operazione su questo tipo di dato"; break;
+		case 3: data = "Errore"; response = "Non e' possibile eseguire questa operazione su questo tipo di dato"; break;
+		case 4: data = "Errore"; response = "Non e' possibile eseguire questa operazione su questo tipo di dato"; break;
 		case 5:
+			data = "Elementi unici";
 			ArrayList<String> uniques = new ArrayList<String>();
 			int c = 0;
 			for (int i = 0; i < temp0.size(); i++) {
@@ -79,43 +88,135 @@ public class ChoiceController {
 					if (i == j) {}
 					else {
 						if (temp0.get(i).equals(temp0.get(j))) {
-						c++;
+							c++;
 						}
 					}
-			}
-			if (c == 0) 
-				uniques.add(temp0.get(i));
-			c = 0;
-		}
-		response = uniques.toString();
-		break;
+				}
+				if (c == 0) 
+					uniques.add(temp0.get(i));
+				c = 0;
+				}
+			response = uniques.toString();
+			break;
 		}
 		break;
 		
 		case 1: ArrayList<Integer> temp1 = allAltitudine();
 		switch (Stat) {
-		case 0: response="pupu"; break;
-		case 1: response="pupu"; break;
-		case 2: response="pupu"; break;
-		case 3: response="pupu"; break;
-		case 4: response="pupu"; break;
-		case 5: response="pupu"; break;
+		case 0: 
+			data = "Average";
+			int sum = 0;
+		    for (int i=0; i< temp1.size(); i++) {
+		          sum += temp1.get(i);
+		    }
+		    response = Integer.toString(sum / temp1.size());
+		    break;
+		case 1: 
+			data="Min";
+			int minIndex = Collections.min(temp1);
+			response = Integer.toString(minIndex);
+			break;
+		case 2: 
+			data="Max";
+			int maxIndex = Collections.max(temp1);
+			response = Integer.toString(maxIndex); 
+			break;
+		case 3: 
+			data="Sum";
+			int sum1 = 0;
+			for (int i=0; i< temp1.size(); i++) {
+		          sum1 += temp1.get(i);
+		    }
+		    response = Integer.toString(sum1);
+			break;
+		case 4: 
+			data="DevStandard";
+			ArrayList<Double> input2 = new ArrayList<Double>();
+			double sum0 = 0;
+		    double sum2 = 0;
+		    double sd = 0;
+		    for (int i = 0; i < temp1.size(); i++) {
+		        sum0 = sum0 + temp1.get(i);
+		    }
+		    double mean = sum0 / temp1.size();
+		    for (int i = 0; i < temp1.size(); i++) {
+		        input2.add((Math.pow((temp1.get(i) - mean), 2)));
+		    }
+		    for (int i = 0; i < input2.size(); i++) {
+		        sum2 = sum2 + input2.get(i);
+		    }
+		    double mean2 = sum2 / input2.size();
+
+		    sd = Math.sqrt(mean2);
+		    response = Double.toString(sd);
+			break;
+		case 5: 
+			data="Conta elementi"; 
+			response = Integer.toString(temp1.size());
+			break;
 		}
 		break;
 		
 		case 2: ArrayList<Double> temp2 = allFrequenza();
 		switch (Stat) {
-		case 0: response="pupu"; break;
-		case 1: response="pupu"; break;
-		case 2: response="pupu"; break;
-		case 3: response="pupu"; break;
-		case 4: response="pupu"; break;
-		case 5: response="pupu"; break;
+		case 0: 
+			data = "Average";
+			double sum = 0;
+		    for (int i=0; i< temp2.size(); i++) {
+		          sum += temp2.get(i);
+		    }
+		    response = Double.toString(sum / temp2.size());
+		    break;
+		case 1:
+			data="Min";
+			double minIndex = Collections.min(temp2);
+			response = Double.toString(minIndex);
+			break;
+		case 2: 
+			data="Max";
+			double maxIndex = Collections.max(temp2);
+			response = Double.toString(maxIndex);
+			break;
+		case 3: 
+			data="Sum";
+			double sum1 = 0;
+			for (int i=0; i< temp2.size(); i++) {
+		          sum1 += temp2.get(i);
+		    }
+		    response = Double.toString(sum1);
+			break;
+		case 4: 
+			data="DevStandard";
+			ArrayList<Double> input2 = new ArrayList<Double>();
+			double sum0 = 0;
+		    double sum2 = 0;
+		    double sd = 0;
+		    for (int i = 0; i < temp2.size(); i++) {
+		        sum0 = sum0 + temp2.get(i);
+		    }
+		    double mean = sum0 / temp2.size();
+		    for (int i = 0; i < temp2.size(); i++) {
+		        input2.add((Math.pow((temp2.get(i) - mean), 2)));
+		    }
+		    for (int i = 0; i < input2.size(); i++) {
+		        sum2 = sum2 + input2.get(i);
+		    }
+		    double mean2 = sum2 / input2.size();
+
+		    sd = Math.sqrt(mean2);
+		    response = Double.toString(sd);
+			break;
+		case 5: 
+			data="Conta elementi"; 
+			response = Integer.toString(temp2.size());
+			break;
 		}
 		break;
 		}
 		
-		return response;
+		HashMap<String,String> prova = new HashMap<String,String>();
+		prova.put(data, response);
+		return prova;
 	}
 	
 	
