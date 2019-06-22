@@ -2,6 +2,10 @@
     display: none;
 }
 
+#fltr {
+    display: none;
+}
+
 .css {
     color: blue;
 }
