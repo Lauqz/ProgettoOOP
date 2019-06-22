@@ -1,4 +1,4 @@
-
+﻿
 
 
 # Progetto di Programmazione ad Oggetti 
@@ -31,4 +31,12 @@ La schermata permetterà l'esecuzione di diverse operazioni:
 
 # Diagrammi UML
 
+### Diagramma degli stati 
 ![](/Section.png)
+
+### Diagramma use case
+![](/usecase.png)
+
+### Diagramma classi
+![](/class.png)
+

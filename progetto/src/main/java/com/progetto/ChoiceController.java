@@ -379,6 +379,7 @@ public class ChoiceController {
 		return temp;
 	}
 	
+	
 	protected static ArrayList<Double> allFrequenza(){
 		ArrayList<Catasto> arr = new ArrayList<Catasto>();
 		ArrayList<Double> temp = new ArrayList<Double>();
@@ -423,6 +424,8 @@ public class ChoiceController {
 	}
 		return temp;
 	}
+	
+	
 	protected static ArrayList<Catasto> getCatasti()
 	{
 		ArrayList<Catasto> arr = new ArrayList<Catasto>();
@@ -441,6 +444,8 @@ public class ChoiceController {
 	}
 		return arr;
 	}
+	
+	
 	protected static ArrayList<Catasto> findmajminAltid(int c,int lim)
 	{
 		ArrayList<Catasto> cat = new ArrayList<Catasto>();
@@ -467,6 +472,8 @@ public class ChoiceController {
 		}
 		return filtered;
 	}
+	
+	
 	protected static ArrayList<Catasto> findmajminFreq(int c,Double lim)
 	{
 		ArrayList<Catasto> cat = new ArrayList<Catasto>();
@@ -494,29 +501,29 @@ public class ChoiceController {
 		return filtered;
 	}
 	
-	public ArrayList<Catasto> IntersectionAlt(ArrayList<Catasto> list1, ArrayList<Catasto> list2)
+	
+	protected ArrayList<Catasto> IntersectionAlt(ArrayList<Catasto> list1, ArrayList<Catasto> list2)
 	{
 	ArrayList<Catasto> cat = new ArrayList<Catasto>();
-	
 		
 	for(Catasto c1 : list1) {
 		for(Catasto c2: list2) {
 			if(ugualeAlt(c1, c2)) {
-				cat.add(c1);
-				
+				boolean flag = false;
+				for (Catasto s: cat) {
+					if (ugualeAlt(s, c1))
+						flag = true;
+				}
+				if (!flag)
+					cat.add(c1);
 			}
 		}
 	}
-		
-		
-				
-				
-			
-			
-	
 	return cat;	
 	}
-	public ArrayList<Catasto> IntersectionFreq(ArrayList<Catasto> list1, ArrayList<Catasto> list2)
+	
+	
+	protected ArrayList<Catasto> IntersectionFreq(ArrayList<Catasto> list1, ArrayList<Catasto> list2)
 	{
 	ArrayList<Catasto> cat = new ArrayList<Catasto>();
 	
@@ -524,37 +531,34 @@ public class ChoiceController {
 	for(Catasto c1 : list1) {
 		for(Catasto c2: list2) {
 			if(ugualeFreq(c1, c2)) {
-				cat.add(c1);
-				
+				boolean flag = false;
+				for (Catasto s: cat) {
+					if (ugualeFreq(s, c1))
+						flag = true;
+				}
+				if (!flag)
+					cat.add(c1);
 			}
 		}
 	}
-		
-		
-				
-				
-			
-			
-	
 	return cat;	
 	}
-	private boolean ugualeAlt(Catasto c1, Catasto c2) {
+	
+	
+	protected boolean ugualeAlt(Catasto c1, Catasto c2) {
 		
-						if(c1.getAltitudine() == c2.getAltitudine()) {
-											return true;
-													
-						}
-										
+		if(c1.getAltitudine() == c2.getAltitudine()) {
+			return true;							
+		}				
 		return false;
 	}
-	private boolean ugualeFreq(Catasto c1, Catasto c2) {
+	
+	
+	protected boolean ugualeFreq(Catasto c1, Catasto c2) {
 		
 		if(c1.getFrequenza() == c2.getFrequenza()) {
-							return true;
-									
-		}
-						
+			return true;						
+		}		
 		return false;
-}
-	
+	}
 }

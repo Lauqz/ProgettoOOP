@@ -20,6 +20,14 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
+
+/*
+ * Classe che tramite la request mapping a / scarica il json,
+ * effettua il parsing del json per ottenere il csv,
+ * scarica il csv nella cartella dell'applicazione,
+ * e serializza gli oggetti del csv in un file.dat
+ * Serviranno poi per i metodi successi
+ */
 @Controller
 public class StreamingResponseController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
