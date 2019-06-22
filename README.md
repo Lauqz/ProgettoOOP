@@ -5,11 +5,17 @@
 
 il seguente file andrà ad introdurre ed esplicare il progetto svolto dagli studenti Antici Francesco e Laudenzi Guido, valido per il corso di programmazione ad oggetti a.a. 2018/2019.
 
+### How to run 
+
+Posizionarsi tramite command line nella cartella /progetto contente i file eseguibili e digitare l'istruzione: 
+```
+mvn spring-boot:run
+```
 ###  Getting Started
 
-Una volta scaricato il progetto dal sito <https://github.com> e aperto con un editor per eseguire progetti creati con framework spring, si visiti il link http://localhost :8080/.
+Una volta scaricato il progetto dal sito <https://github.com> e aperto con un editor per eseguire progetti creati con framework spring, si visiti il link <http://localhost:8080/>.
 
-Si presenterà la homepage della webapp che farà in automatico il download del file CSV, successivo a parsing del file JSON e verifica di presenza del file, contenente i dati Catasto, che verranno poi istanziati ad oggetti della classe catasto.
+Si presenterà la homepage della webapp che farà in automatico il download del file CSV, successivo a parsing del file JSON e verifica di presenza precedente del file, contenente i dati di Catasto.
 
 ### Tests
 
